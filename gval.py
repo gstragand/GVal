@@ -3,6 +3,20 @@ import sys
 import getopt
 import json
 
+DOC = \
+    '     -e, --element\n' + \
+    '          JSON element to distribute\n' + \
+    '     -i, --input\n' + \
+    '          Input directory\n' + \
+    '     -h, --help\n' + \
+    '          This message\n'
+
+if len(sys.argv) < 2:
+    print(DOC)
+    sys.exit(0)
+if '-h' in sys.argv or '--help' in sys.argv:
+    print(DOC)
+    sys.exit(0)
 input_dir = "."
 element = ""
 options, remainder = getopt.getopt(sys.argv[1:], 'i:e:h' , ['i=', 'input=', 'element=', 'help', ])
@@ -10,16 +24,9 @@ for opt, arg in options:
     if opt in ('-i', '--input'):
         input_dir = arg
     elif opt in ('-e', '--element'):
-        element = arg
-    elif opt in ('-h', '--help'):
-        print '     -e, --element'
-        print '          JSON element to distribute'
-        print '     -i, --input'
-        print '          Input directory'
-        print '     -h, --help'
-        print '          This message'
+        element = args
 if element is "":
-    sys.exit()
+    sys.exit(0)
 print 'Input directory: ' + input_dir
 print 'JSON element: ' + element
 distribution = dict()
