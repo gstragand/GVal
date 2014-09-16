@@ -37,12 +37,22 @@ if __name__ == '__main__':
                 with open(subdir + '/' + file, 'r') as f:
                     print "Processing: " + file
                     for line in f.readlines():
-                        json_data = json.loads(line)
-                        value = json_data[element] if element in json_data else ""
-                        if value in distribution:
-                            distribution[value] = distribution[value] + 1
-                        else:
-                            distribution[value] = 0
-                f.close()
+                        try:
+                            json_data = json.loads(line)
+                            value = json_data[element] if element in json_data else ""
+                            if value in distribution:
+                                distribution[value] = distribution[value] + 1
+                            else:
+                                distribution[value] = 1
+                        except Exception as details:
+                            print details
+                            key = file + ": " + str(details).encode('utf-8')
+                            if key in distribution:
+                                distribution[key] = distribution[key] + 1
+                            else:
+                                distribution[key] = 1
+                            pass
+                        finally:
+                            f.close()
     for k, v in sorted(distribution.iteritems(), key=lambda (k,v): (v * -1,k)):
         print u'{0}: {1}'.format(k, v)
