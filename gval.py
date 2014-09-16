@@ -25,7 +25,7 @@ if __name__ == '__main__':
         if opt in ('-i', '--input'):
             input_dir = arg
         elif opt in ('-e', '--element'):
-            element = args
+            element = arg
     if element is "":
         sys.exit(0)
     print 'Input directory: ' + input_dir
