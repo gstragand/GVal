@@ -12,10 +12,7 @@ if __name__ == '__main__':
         '     -h, --help\n' + \
         '          This message\n'
 
-    if len(sys.argv) < 2:
-        print(DOC)
-        sys.exit(0)
-    if '-h' in sys.argv or '--help' in sys.argv:
+    if len(sys.argv) < 2 or '-h' in sys.argv or '--help' in sys.argv:
         print(DOC)
         sys.exit(0)
     input_dir = "."
