@@ -3,6 +3,14 @@ import sys
 import getopt
 import json
 
+def getKey(arg):
+    if isinstance(arg, basestring):
+        return repr(arg)
+    try:
+        return '<' + ", ".join(getKey(x) for x in arg) + '>'
+    except TypeError:
+        return repr(arg)
+
 if __name__ == '__main__':
     DOC = \
         '     -e, --element\n' + \
@@ -12,7 +20,10 @@ if __name__ == '__main__':
         '     -h, --help\n' + \
         '          This message\n'
 
-    if len(sys.argv) < 2 or '-h' in sys.argv or '--help' in sys.argv:
+    if len(sys.argv) < 2:
+        print(DOC)
+        sys.exit(0)
+    if '-h' in sys.argv or '--help' in sys.argv:
         print(DOC)
         sys.exit(0)
     input_dir = "."
@@ -36,7 +47,7 @@ if __name__ == '__main__':
                     for line in f.readlines():
                         try:
                             json_data = json.loads(line)
-                            value = json_data[element] if element in json_data else ""
+                            value = getKey(json_data[element] if element in json_data else "")
                             if value in distribution:
                                 distribution[value] = distribution[value] + 1
                             else:
@@ -53,3 +64,4 @@ if __name__ == '__main__':
                             f.close()
     for k, v in sorted(distribution.iteritems(), key=lambda (k,v): (v * -1,k)):
         print u'{0}: {1}'.format(k, v)
+
