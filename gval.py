@@ -3,11 +3,12 @@ import sys
 import getopt
 import json
 
-def getKey(arg):
+
+def getkey(arg):
     if isinstance(arg, basestring):
         return repr(arg)
     try:
-        return '<' + ", ".join(getKey(x) for x in arg) + '>'
+        return '<' + ", ".join(getkey(x) for x in arg) + '>'
     except TypeError:
         return repr(arg)
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
         sys.exit(0)
     input_dir = "."
     element = ""
-    options, remainder = getopt.getopt(sys.argv[1:], 'i:e:h' , ['i=', 'input=', 'element=', 'help', ])
+    options, remainder = getopt.getopt(sys.argv[1:], 'i:e:h', ['i=', 'input=', 'element=', 'help', ])
     for opt, arg in options:
         if opt in ('-i', '--input'):
             input_dir = arg
@@ -40,28 +41,27 @@ if __name__ == '__main__':
     print 'JSON element: ' + element
     distribution = dict()
     for subdir, dirs, files in os.walk(input_dir):
-        for file in files:
-            if file.endswith(".json"):
-                with open(subdir + '/' + file, 'r') as f:
-                    print "Processing: " + file
+        for workfile in files:
+            if workfile.endswith(".json"):
+                with open(subdir + '/' + workfile, 'r') as f:
+                    print "Processing: " + workfile
                     for line in f.readlines():
                         try:
                             json_data = json.loads(line)
-                            value = getKey(json_data[element] if element in json_data else "")
+                            value = getkey(json_data[element] if element in json_data else "")
                             if value in distribution:
-                                distribution[value] = distribution[value] + 1
+                                distribution[value] += 1
                             else:
                                 distribution[value] = 1
                         except Exception as details:
                             print details
-                            key = file + ": " + str(details).encode('utf-8')
+                            key = workfile + ": " + str(details).encode('utf-8')
                             if key in distribution:
-                                distribution[key] = distribution[key] + 1
+                                distribution[key] += 1
                             else:
                                 distribution[key] = 1
                             pass
                         finally:
                             f.close()
-    for k, v in sorted(distribution.iteritems(), key=lambda (k,v): (v * -1,k)):
+    for k, v in sorted(distribution.iteritems(), key=lambda (k, v): (v * -1, k)):
         print u'{0}: {1}'.format(k, v)
-
