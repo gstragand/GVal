@@ -1,7 +1,7 @@
 GVal
 ====
 
-Python code for data exploration of massive amouts of data in JSON format
+Python code for data exploration of massive amounts of data in JSON format
 
 Documentation at: http://georgestragand.com/pythonJSONdistribution.html
 
